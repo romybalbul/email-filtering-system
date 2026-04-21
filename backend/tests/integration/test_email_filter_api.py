@@ -1,8 +1,6 @@
 from fastapi.testclient import TestClient
 from app.main import app
 
-client = TestClient(app)
-
 
 def test_filter_email_rejects_malicious_email():
     payload = {
@@ -19,7 +17,8 @@ def test_filter_email_rejects_malicious_email():
         ]
     }
 
-    response = client.post("/emails/filter", json=payload)
+    with TestClient(app) as client:
+        response = client.post("/emails/filter", json=payload)
 
     assert response.status_code == 200
 
@@ -39,7 +38,8 @@ def test_filter_email_allows_trusted_sender():
         "attachments": []
     }
 
-    response = client.post("/emails/filter", json=payload)
+    with TestClient(app) as client:
+        response = client.post("/emails/filter", json=payload)
 
     assert response.status_code == 200
 
