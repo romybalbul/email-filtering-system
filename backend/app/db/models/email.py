@@ -1,5 +1,5 @@
 from sqlalchemy import DateTime, Integer, String, Text, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 
@@ -18,4 +18,10 @@ class EmailRecord(Base):
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False,
+    )
+
+    rule_hits = relationship(
+        "RuleHitRecord",
+        back_populates="email",
+        cascade="all, delete-orphan",
     )

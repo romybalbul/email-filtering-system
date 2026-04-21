@@ -5,6 +5,7 @@ from typing import List
 class MatchedRule(BaseModel):
     rule: str
     score_delta: int
+    reason: str | None = None
 
 
 class FilterResponse(BaseModel):

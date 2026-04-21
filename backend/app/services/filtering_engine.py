@@ -44,7 +44,11 @@ class FilteringEngine:
                 if result.reason:
                     reasons.append(result.reason)
                 matched_rules.append(
-                    MatchedRule(rule=rule.name, score_delta=result.score_delta)
+                    MatchedRule(
+                        rule=rule.name,
+                        score_delta=result.score_delta,
+                        reason=result.reason,
+                    )
                 )
 
         verdict = self._score_to_verdict(total_score)
