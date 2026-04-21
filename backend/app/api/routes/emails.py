@@ -19,7 +19,7 @@ engine = FilteringEngine()
 
 @router.post("/filter", response_model=FilterResponse)
 def filter_email(payload: EmailInput, db: Session = Depends(get_db)) -> FilterResponse:
-    result = engine.evaluate(payload)
+    result = engine.evaluate(payload, db)
     record = save_filtered_email(db, payload, result)
     return result.model_copy(update={"email_id": record.id})
 

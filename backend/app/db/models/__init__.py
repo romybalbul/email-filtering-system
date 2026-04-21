@@ -1,4 +1,5 @@
 from app.db.models.email import EmailRecord
+from app.db.models.list_entry import ListEntryRecord
 from app.db.models.rule_hit import RuleHitRecord
 
-__all__ = ["EmailRecord", "RuleHitRecord"]
+__all__ = ["EmailRecord", "RuleHitRecord", "ListEntryRecord"]
