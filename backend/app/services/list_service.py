@@ -6,12 +6,18 @@ ALLOWED_LIST_TYPES = {
     "trusted_domains",
     "blocked_senders",
     "blocked_extensions",
+    "blocked_ips",
+    "relay_allowed_ips",
+    "local_domains",
 }
 
 DEFAULT_LISTS = {
     "trusted_domains": {"company.com", "partner.com"},
     "blocked_senders": {"attacker@evil-example.com", "scam@bad.com"},
     "blocked_extensions": {".exe", ".bat", ".js", ".scr"},
+    "blocked_ips": set(),
+    "relay_allowed_ips": {"127.0.0.1", "::1"},
+    "local_domains": {"company.com"},
 }
 
 

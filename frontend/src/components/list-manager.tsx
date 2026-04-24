@@ -5,7 +5,7 @@ import { addListEntry, deleteListEntry, getListEntries } from "@/lib/api";
 import type { ListEntry } from "@/lib/types";
 
 type Props = {
-  listType: "trusted_domains" | "blocked_senders" | "blocked_extensions";
+  listType: "trusted_domains" | "blocked_senders" | "blocked_extensions" | "blocked_ips" | "relay_allowed_ips" | "local_domains";
   title: string;
 };
 
