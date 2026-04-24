@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from app.api.routes.auth import get_current_user
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
@@ -14,7 +15,7 @@ router = APIRouter(prefix="/lists", tags=["lists"])
 
 
 @router.get("/{list_type}", response_model=list[ListEntryResponse])
-def get_list_entries(list_type: str, db: Session = Depends(get_db)) -> list[ListEntryResponse]:
+def get_list_entries(list_type: str, db: Session = Depends(get_db), current_user = Depends(get_current_user)) -> list[ListEntryResponse]:
     try:
         validate_list_type(list_type)
     except ValueError as exc:
@@ -27,6 +28,7 @@ def add_list_entry(
     list_type: str,
     payload: ListEntryCreate,
     db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
 ) -> ListEntryResponse:
     try:
         validate_list_type(list_type)
@@ -36,7 +38,7 @@ def add_list_entry(
 
 
 @router.delete("/{list_type}/{entry_id}", status_code=204)
-def remove_list_entry(list_type: str, entry_id: int, db: Session = Depends(get_db)):
+def remove_list_entry(list_type: str, entry_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     try:
         validate_list_type(list_type)
     except ValueError as exc:

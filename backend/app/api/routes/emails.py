@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from app.api.routes.auth import get_current_user
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
@@ -18,19 +19,19 @@ engine = FilteringEngine()
 
 
 @router.post("/filter", response_model=FilterResponse)
-def filter_email(payload: EmailInput, db: Session = Depends(get_db)) -> FilterResponse:
+def filter_email(payload: EmailInput, db: Session = Depends(get_db), current_user = Depends(get_current_user)) -> FilterResponse:
     result = engine.evaluate(payload, db)
     record = save_filtered_email(db, payload, result)
     return result.model_copy(update={"email_id": record.id})
 
 
 @router.get("", response_model=list[StoredEmailResponse])
-def get_emails(db: Session = Depends(get_db)) -> list[StoredEmailResponse]:
+def get_emails(db: Session = Depends(get_db), current_user = Depends(get_current_user)) -> list[StoredEmailResponse]:
     return list_emails(db)
 
 
 @router.get("/{email_id}", response_model=EmailDetailsResponse)
-def get_email(email_id: int, db: Session = Depends(get_db)) -> EmailDetailsResponse:
+def get_email(email_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)) -> EmailDetailsResponse:
     record = get_email_by_id(db, email_id)
     if not record:
         raise HTTPException(status_code=404, detail="Email not found")
@@ -38,7 +39,7 @@ def get_email(email_id: int, db: Session = Depends(get_db)) -> EmailDetailsRespo
 
 
 @router.get("/{email_id}/rule-hits", response_model=list[RuleHitResponse])
-def get_email_rule_hits(email_id: int, db: Session = Depends(get_db)) -> list[RuleHitResponse]:
+def get_email_rule_hits(email_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)) -> list[RuleHitResponse]:
     record = get_email_by_id(db, email_id)
     if not record:
         raise HTTPException(status_code=404, detail="Email not found")
