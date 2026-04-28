@@ -7,8 +7,7 @@ from aiosmtpd.controller import Controller
 from app.db.base import Base
 from app.db.session import SessionLocal, engine
 from app.schemas.email import AttachmentInput, EmailInput
-from app.services.email_service import save_filtered_email
-from app.services.filtering_engine import FilteringEngine
+from app.services.queue_service import enqueue_email
 from app.services.list_service import seed_default_lists
 from app.services.network_list_service import (
     is_blocked_ip,
@@ -116,14 +115,11 @@ class EmailFilterHandler:
 
         db = SessionLocal()
         try:
-            filtering_engine = FilteringEngine()
-            result = filtering_engine.evaluate(email_input, db)
-            record = save_filtered_email(db, email_input, result)
+            record = enqueue_email(db, email_input)
 
             print(
-                f"SMTP email saved: id={record.id}, "
-                f"peer_ip={peer_ip}, sender={sender}, "
-                f"recipient={recipient}, verdict={result.verdict}, score={result.score}"
+                f"SMTP email queued: id={record.id}, "
+                f"peer_ip={peer_ip}, sender={sender}, recipient={recipient}"
             )
         finally:
             db.close()

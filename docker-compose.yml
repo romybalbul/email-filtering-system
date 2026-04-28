@@ -2,11 +2,11 @@ services:
   db:
     image: postgres:16
     container_name: email_filtering_db
-    restart: unless-stopped
+    restart: always
     environment:
-      POSTGRES_DB: email_filtering
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: email_filtering
     ports:
       - "5433:5432"
     volumes:
