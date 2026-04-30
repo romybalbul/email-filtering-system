@@ -69,3 +69,7 @@ export async function deleteListEntry(
     method: "DELETE",
   });
 }
+
+export async function getQueue() {
+  return apiFetch<any[]>("/queue");
+}
